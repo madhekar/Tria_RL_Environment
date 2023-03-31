@@ -11,7 +11,7 @@ class TriaClimateEnv(gym.Env):
                 't_ini': 32.0, 'h_ini': 80.0, 'a_ini': 100.0,
 
                 't_min':-40.0, 'h_min':0.0,   'a_min':0.0,
-                't_max':110,   'h_max':100.0, 'a_max':5000.0,
+                't_max':110,   'h_max':100.0, 'a_max':2000.0,
                 'stat_rand_min':-1.0, 'stat_rand_max':1.0, 'equilibrium_cycles':60,
                 'reward1': -0.5, 'reward2': -1.0, 'reward3': 10.0, 'nreward': -10.0,
                 'weight_vec': [1,1,1,1,1], 'action_states' : 2,
@@ -36,8 +36,6 @@ class TriaClimateEnv(gym.Env):
         self.action_space =  spaces.MultiDiscrete(np.array([self.metadata['action_states'], self.metadata['action_states'],
                                                             self.metadata['action_states'], self.metadata['action_states'],
                                                             self.metadata['action_states']]))
-
-
 
         assert render_mode is None or render_mode in self.metadata["render_modes"]
         self.render_mode = render_mode
@@ -71,7 +69,7 @@ class TriaClimateEnv(gym.Env):
         return self.state
 
     def step(self, action):
-
+        #print(action) 
         ap_scaled = [1 if e == 1 else -1 for e in action]  # 0 (off) => -1 and 1 (on) => 1
 
         actionPrime = [a * b for a, b in zip(ap_scaled, self.metadata['weight_vec'])]
@@ -92,7 +90,7 @@ class TriaClimateEnv(gym.Env):
         reward = [self.metadata['reward3'] if e >= self.metadata['range_dict'][i][0] and e<= self.metadata['range_dict'][i][1] else self.metadata['reward2'] if e >= self.metadata['range_dict'][i][2] and e<= self.metadata['range_dict'][i][3] else self.metadata['reward1'] if e >= self.metadata['range_dict'][i][4] and e <= self.metadata['range_dict'][i][5] else self.metadata['nreward'] for i, e in enumerate(self.state)]
         #reward = [r3 if e >= d1[i][0] and e <= d1[i][1] else nr3  for i, e in enumerate(self.state)]
 
-        self.state = [(-1 + (2.0 * ((v - x[0]) /(x[1] - x[0])))) for x,v in zip(self.scale_range, self.state)]
+        # self.state = [(-1 + (2.0 * ((v - x[0]) /(x[1] - x[0])))) for x,v in zip(self.scale_range, self.state)]
    
         reward = sum(reward)
         #print('$$$', reward)
