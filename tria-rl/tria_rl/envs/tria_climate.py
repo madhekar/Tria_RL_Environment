@@ -13,7 +13,7 @@ class TriaClimateEnv(gym.Env):
                 't_min':-40.0, 'h_min':0.0,   'a_min':0.0,
                 't_max':110,   'h_max':100.0, 'a_max':2000.0,
                 'stat_rand_min':-1.0, 'stat_rand_max':1.0, 'equilibrium_cycles':60,
-                'reward1': -0.5, 'reward2': -1.0, 'reward3': 10.0, 'nreward': -10.0,
+                'reward1': -0.25, 'reward2': -0.5, 'reward3': 10.0, 'nreward': -10.0,
                 'weight_vec': [1,1,1,1,1], 'action_states' : 2,
                 'range_dict': {
                             0 : [65.0, 80.0, 50.0, 85.0, 40.0, 90.0],
