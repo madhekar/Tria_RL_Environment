@@ -12,8 +12,8 @@ class TriaClimateEnv(gym.Env):
 
                 't_min':-40.0, 'h_min':0.0,   'a_min':0.0,
                 't_max':110,   'h_max':100.0, 'a_max':2000.0,
-                'stat_rand_min':-1.0, 'stat_rand_max':1.0, 'equilibrium_cycles':60,
-                'reward1': -0.25, 'reward2': -0.5, 'reward3': 10.0, 'nreward': -10.0,
+                'stat_rand_min':-1.0, 'stat_rand_max':1.0, 'equilibrium_cycles':250,
+                'reward1': -0.5, 'reward2': -0.25, 'reward3': 10.0, 'nreward': -10.0,
                 'weight_vec': [1,1,1,1,1], 'action_states' : 2,
                 'range_dict': {
                             0 : [65.0, 80.0, 50.0, 85.0, 40.0, 90.0],
@@ -74,13 +74,17 @@ class TriaClimateEnv(gym.Env):
 
         actionPrime = [a * b for a, b in zip(ap_scaled, self.metadata['weight_vec'])]
 
-        actionAlgo = [actionPrime[a] - actionPrime[len(actionPrime) -a -1] for a in range(len(actionPrime) // 2)]
+
+
+        actionAlgo = [(actionPrime[a] + actionPrime[len(actionPrime) -a -1]) * 0.5 for a in range(len(actionPrime) // 2)]
+        
+        #print('ap_scaled: ', ap_scaled, 'actionPrime: ', actionPrime,'actionAlgo: ', actionAlgo)
 
         actionAlgo.append(actionPrime[len(actionPrime) // 2])
 
         #print('***',actionAlgo, self.state)
 
-        self.state = [a + b for a, b in zip(actionAlgo, self.state)]
+        self.state = [ a + b for a, b in zip(actionAlgo, self.state)]
 
         #print('&&&', actionAlgo, self.state)
 
@@ -91,9 +95,10 @@ class TriaClimateEnv(gym.Env):
         #reward = [r3 if e >= d1[i][0] and e <= d1[i][1] else nr3  for i, e in enumerate(self.state)]
 
         # self.state = [(-1 + (2.0 * ((v - x[0]) /(x[1] - x[0])))) for x,v in zip(self.scale_range, self.state)]
-   
+        print('reward:{} state:{} action: {} '.format(reward, self.state, actionAlgo))
+
         reward = sum(reward)
-        #print('$$$', reward)
+        
 
         if self.equilibrium_cycles <= 0:
             terminated = True
