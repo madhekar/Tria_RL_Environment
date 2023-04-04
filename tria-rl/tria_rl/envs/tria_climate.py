@@ -8,12 +8,12 @@ class TriaClimateEnv(gym.Env):
       scale between -1 and 1 
     '''
     metadata = {
-                't_ini': -39.0, 'h_ini': 0.0, 'a_ini': 1999.0,
+                't_ini': 109.0, 'h_ini': 0.0, 'a_ini': 1999.0,
 
-                't_min':-40.0, 'h_min':0.0,   'a_min':0.0,
+                't_min':0.0, 'h_min':0.0,   'a_min':0.0,
                 't_max':110,   'h_max':100.0, 'a_max':2000.0,
                 'stat_rand_min':-1.0, 'stat_rand_max':1.0, 'equilibrium_cycles':250,
-                'reward1': -0.5, 'reward2': -0.25, 'reward3': 10.0, 'nreward': -10.0,
+                'reward1': -1.0, 'reward2': -0.5, 'reward3': 100.0, 'nreward': -10.0,
                 'weight_vec': [1,1,1,1,1], 'action_states' : 2,
                 'range_dict': {
                             0 : [65.0, 80.0, 50.0, 85.0, 40.0, 90.0],
@@ -38,6 +38,11 @@ class TriaClimateEnv(gym.Env):
         self.action_space =  spaces.MultiDiscrete(np.array([self.metadata['action_states'], self.metadata['action_states'],
                                                             self.metadata['action_states'], self.metadata['action_states'],
                                                             self.metadata['action_states']]))
+        
+        self.mean = [self.metadata['range_dict'][0][0] + self.metadata['range_dict'][0][1] // 2,
+                     self.metadata['range_dict'][1][0] + self.metadata['range_dict'][1][1] // 2,
+                     self.metadata['range_dict'][2][0] + self.metadata['range_dict'][2][1] // 2
+                     ]
 
         assert render_mode is None or render_mode in self.metadata["render_modes"]
 
