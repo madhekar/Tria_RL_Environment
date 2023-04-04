@@ -25,7 +25,7 @@ class TriaClimateEnv(gym.Env):
     def __init__(self, render_mode=None):
         # Observations are dictionaries with the agent's and the target's location.
         # Each location is encoded as an element of {0, ..., `size`}^2, i.e. MultiDiscrete([size, size]).
-        self.pre_state = [self.metadata['t_ini'], self.metadata['h_ini'], self.metadata['a_ini']]
+        #self.pre_state = [self.metadata['t_ini'], self.metadata['h_ini'], self.metadata['a_ini']]
 
         self.scale_range = [(self.metadata['t_min'],self.metadata['t_max']), (self.metadata['h_min'],self.metadata['h_max']),(self.metadata['h_min'],self.metadata['h_max'])]
         
@@ -77,8 +77,6 @@ class TriaClimateEnv(gym.Env):
 
         actionPrime = [a * b for a, b in zip(ap_scaled, self.metadata['weight_vec'])]
 
-
-
         actionAlgo = [(actionPrime[a] - actionPrime[a + 3]) for a in range(len(actionPrime) // 2)]
         
         #print('ap_scaled: ', ap_scaled, 'actionPrime: ', actionPrime,'actionAlgo: ', actionAlgo)
@@ -102,6 +100,11 @@ class TriaClimateEnv(gym.Env):
 
         reward = [self.metadata['reward3'] if e >= self.metadata['range_dict'][i][0] and e<= self.metadata['range_dict'][i][1] else self.metadata['reward2'] if e >= self.metadata['range_dict'][i][2] and e<= self.metadata['range_dict'][i][3] else self.metadata['reward1'] if e >= self.metadata['range_dict'][i][4] and e <= self.metadata['range_dict'][i][5] else self.metadata['nreward'] for i, e in enumerate(self.state)]
         #reward = [r3 if e >= d1[i][0] and e <= d1[i][1] else nr3  for i, e in enumerate(self.state)]
+
+        #add some abbrations 
+        st_random = np.random.uniform(self.metadata['stat_rand_min'],self.metadata['stat_rand_max'],3) 
+        
+        self.state += st_random
 
         #self.state = [(-1 + (2.0 * ((v - x[0]) /(x[1] - x[0])))) for x,v in zip(self.scale_range, self.state)]
         print('reward:{} state:{} action: {} '.format(reward, self.state, actionPrime))
