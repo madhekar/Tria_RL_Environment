@@ -8,12 +8,12 @@ class TriaClimateEnv(gym.Env):
       scale between -1 and 1 
     '''
     metadata = {
-                't_ini': 109.0, 'h_ini': 0.0, 'a_ini': 1999.0,
+                't_ini': 109.0, 'h_ini': 99.0, 'a_ini': 1999.0,
 
                 't_min':0.0, 'h_min':0.0,   'a_min':0.0,
                 't_max':110,   'h_max':100.0, 'a_max':2000.0,
                 'stat_rand_min':-1.0, 'stat_rand_max':1.0, 'equilibrium_cycles':250,
-                'reward1': -1.0, 'reward2': -0.5, 'reward3': 100.0, 'nreward': -10.0,
+                'reward1': -1.0, 'reward2': -0.5, 'reward3': 20.0, 'nreward': -10.0,
                 'weight_vec': [1,1,1,1,1], 'action_states' : 2,
                 'range_dict': {
                             0 : [65.0, 80.0, 50.0, 85.0, 40.0, 90.0],
@@ -103,11 +103,13 @@ class TriaClimateEnv(gym.Env):
         #reduce tria simulation length by 1 second
         self.equilibrium_cycles -= 1
 
-        reward = [self.metadata['reward3'] if e >= self.metadata['range_dict'][i][0] and e<= self.metadata['range_dict'][i][1] else self.metadata['reward2'] if e >= self.metadata['range_dict'][i][2] and e<= self.metadata['range_dict'][i][3] else self.metadata['reward1'] if e >= self.metadata['range_dict'][i][4] and e <= self.metadata['range_dict'][i][5] else self.metadata['nreward'] for i, e in enumerate(self.state)]
+        reward = [self.metadata['reward3'] if e >= self.metadata['range_dict'][i][0] and e<= self.metadata['range_dict'][i][1] else self.metadata['reward2'] if e >= self.metadata['range_dict'][i][2] and e<= self.metadata['range_dict'][i][3] else self.metadata['reward1'] if e >= self.metadata['range_dict'][i][4] and e <= self.metadata['range_dict'][i][5] else ((self.mean[i] - self.state[i]) * 0.05) for i, e in enumerate(self.state)]
         #reward = [r3 if e >= d1[i][0] and e <= d1[i][1] else nr3  for i, e in enumerate(self.state)]
 
         #add some abbrations 
         st_random = np.random.uniform(self.metadata['stat_rand_min'],self.metadata['stat_rand_max'],3) 
+
+        #st_random = np.random.random(3)
         
         self.state += st_random
 
