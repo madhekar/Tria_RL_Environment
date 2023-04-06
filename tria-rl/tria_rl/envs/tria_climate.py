@@ -103,7 +103,7 @@ class TriaClimateEnv(gym.Env):
         #reduce tria simulation length by 1 second
         self.equilibrium_cycles -= 1
 
-        reward = [self.metadata['reward3'] if e >= self.metadata['range_dict'][i][0] and e<= self.metadata['range_dict'][i][1] else self.metadata['reward2'] if e >= self.metadata['range_dict'][i][2] and e<= self.metadata['range_dict'][i][3] else self.metadata['reward1'] if e >= self.metadata['range_dict'][i][4] and e <= self.metadata['range_dict'][i][5] else ((self.mean[i] - self.state[i]) * 0.05) for i, e in enumerate(self.state)]
+        reward = [self.metadata['reward3'] if e >= self.metadata['range_dict'][i][0] and e<= self.metadata['range_dict'][i][1] else self.metadata['reward2'] if e >= self.metadata['range_dict'][i][2] and e<= self.metadata['range_dict'][i][3] else self.metadata['reward1'] if e >= self.metadata['range_dict'][i][4] and e <= self.metadata['range_dict'][i][5] else (((self.mean[i] + abs(self.state[i])) * 0.05 * -1) if self.state[i] < 0 else ((self.mean[i] - self.state[i]) * 0.05)) for i, e in enumerate(self.state)]
         #reward = [r3 if e >= d1[i][0] and e <= d1[i][1] else nr3  for i, e in enumerate(self.state)]
 
         #add some abbrations 
