@@ -12,7 +12,7 @@ class TriaClimateEnv(gym.Env):
 
                 't_min':0.0, 'h_min':0.0,   'a_min':0.0,
                 't_max':110,   'h_max':100.0, 'a_max':2000.0,
-                'stat_rand_min':-1.0, 'stat_rand_max':1.0, 'equilibrium_cycles':512,
+                'stat_rand_min':-1.0, 'stat_rand_max':1.0, 'equilibrium_cycles':1000,
                 'reward1': 1.0, 'reward2': 5.0, 'reward3': 20.0, 'nreward': -10.0,
                 'weight_vec': [1, 1, 1, 1, 1], 'action_states' : 2,
                 'range_dict': {
@@ -106,12 +106,13 @@ class TriaClimateEnv(gym.Env):
         reward = [self.metadata['reward3'] if e >= self.metadata['range_dict'][i][0] and e<= self.metadata['range_dict'][i][1] else self.metadata['reward2'] if e >= self.metadata['range_dict'][i][2] and e<= self.metadata['range_dict'][i][3] else self.metadata['reward1'] if e >= self.metadata['range_dict'][i][4] and e <= self.metadata['range_dict'][i][5] else (((self.mean[i] + abs(self.state[i])) * 0.5 * -1) if self.state[i] < self.mean[i] else ((self.mean[i] - self.state[i]) * 0.5)) for i, e in enumerate(self.state)]
         #reward = [r3 if e >= d1[i][0] and e <= d1[i][1] else nr3  for i, e in enumerate(self.state)]
 
-        #add some abbrations 
-        st_random = np.random.uniform(self.metadata['stat_rand_min'],self.metadata['stat_rand_max'],3) 
+        #add some abbrations remove it to make it more deterministic
+        #st_random = np.random.uniform(self.metadata['stat_rand_min'],self.metadata['stat_rand_max'],3) 
 
         #st_random = np.random.random(3)
         
-        self.state += st_random
+        #add some abbrations remove it to make it more deterministic
+        #self.state += st_random
 
         #self.state = [(-1 + (2.0 * ((v - x[0]) /(x[1] - x[0])))) for x,v in zip(self.scale_range, self.state)]
         print('reward:{} state:{} action: {} '.format(reward, self.state, actionPrime))
