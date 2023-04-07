@@ -8,18 +8,18 @@ class TriaClimateEnv(gym.Env):
       scale between -1 and 1 
     '''
     metadata = {
-                't_ini': 85.0, 'h_ini': 65.0, 'a_ini': 90.0,
+                't_ini': 85, 'h_ini': 65, 'a_ini': 90,
 
-                't_min':0.0, 'h_min':0.0,   'a_min':0.0,
-                't_max':110,   'h_max':100.0, 'a_max':2000.0,
-                'stat_rand_min':-1.0, 'stat_rand_max':1.0, 'equilibrium_cycles':1000,
-                'reward1': -0.5, 'reward2': -0.25, 'reward3': 10.0, 'nreward': -10.0,
-                'weight_vec': [1, 1, 1.25, 1, .50], 'action_states' : 2,
+                't_min':0, 'h_min':0,   'a_min':0,
+                't_max':110,   'h_max':100, 'a_max':2000,
+                'stat_rand_min':-1, 'stat_rand_max':1, 'equilibrium_cycles':1000,
+                'reward1': -2, 'reward2': -1, 'reward3': 10, 'nreward': -10,
+                'weight_vec': [1, 1, 1, 1, 1], 'action_states' : 2,
                 'range_dict': {
                             0 : [65.0, 80.0, 50.0, 85.0, 40.0, 90.0],
                             1 : [40.0, 60.0, 30.0, 70.0, 20.0, 80.0],
                             2 : [0.0, 80.0, 81.0, 300.0, 301.0, 800.0]
-                            }           
+                            }          
                 }
 
     def __init__(self, render_mode=None):
@@ -29,8 +29,8 @@ class TriaClimateEnv(gym.Env):
 
         self.scale_range = [(self.metadata['t_min'],self.metadata['t_max']), (self.metadata['h_min'],self.metadata['h_max']),(self.metadata['h_min'],self.metadata['h_max'])]
         
-        low = np.array([self.metadata['t_min'], self.metadata['h_min'], self.metadata['a_min']]).astype(np.float32)
-        high = np.array([self.metadata['t_max'], self.metadata['h_max'], self.metadata['a_max']]).astype(np.float32)
+        low = np.array([self.metadata['t_min'], self.metadata['h_min'], self.metadata['a_min']]).astype(np.int32)
+        high = np.array([self.metadata['t_max'], self.metadata['h_max'], self.metadata['a_max']]).astype(np.int32)
 
         self.observation_space = spaces.Box(low, high, shape=(3,))
 
@@ -48,10 +48,11 @@ class TriaClimateEnv(gym.Env):
 
         self.render_mode = render_mode
 
-        self.state = [self.metadata['t_ini'] + random.uniform(self.metadata['stat_rand_min'], self.metadata['stat_rand_max']),
-                      self.metadata['h_ini'] + random.uniform(self.metadata['stat_rand_min'], self.metadata['stat_rand_max']),
-                      self.metadata['a_ini'] + random.uniform(self.metadata['stat_rand_min'], self.metadata['stat_rand_max'])
-                      ]
+        #self.state = [self.metadata['t_ini'] + random.uniform(self.metadata['stat_rand_min'], self.metadata['stat_rand_max']),
+        #              self.metadata['h_ini'] + random.uniform(self.metadata['stat_rand_min'], self.metadata['stat_rand_max']),
+        #              self.metadata['a_ini'] + random.uniform(self.metadata['stat_rand_min'], self.metadata['stat_rand_max'])
+        #              ]
+        self.state =[self.metadata['t_ini'],self.metadata['h_ini'], self.metadata['a_ini']]
 
         self.equilibrium_cycles = self.metadata['equilibrium_cycles']
 
@@ -65,10 +66,11 @@ class TriaClimateEnv(gym.Env):
 
     def reset(self, seed=None, options=None):
 
-        self.state = [self.metadata['t_ini'] + random.uniform(self.metadata['stat_rand_min'], self.metadata['stat_rand_max']),
-                      self.metadata['h_ini'] + random.uniform(self.metadata['stat_rand_min'], self.metadata['stat_rand_max']),
-                      self.metadata['a_ini'] + random.uniform(self.metadata['stat_rand_min'], self.metadata['stat_rand_max'])
-                      ]
+        #self.state = [self.metadata['t_ini'] + random.uniform(self.metadata['stat_rand_min'], self.metadata['stat_rand_max']),
+        #              self.metadata['h_ini'] + random.uniform(self.metadata['stat_rand_min'], self.metadata['stat_rand_max']),
+        #              self.metadata['a_ini'] + random.uniform(self.metadata['stat_rand_min'], self.metadata['stat_rand_max'])
+        #              ]
+        self.state =[self.metadata['t_ini'],self.metadata['h_ini'], self.metadata['a_ini']]
 
         self.equilibrium_cycles = self.metadata['equilibrium_cycles']
 
