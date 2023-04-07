@@ -8,13 +8,23 @@ class TriaClimateEnv(gym.Env):
       scale between -1 and 1 
     '''
     metadata = {
+                # initial Values for observation space
                 't_ini': 85, 'h_ini': 65, 'a_ini': 90,
-
+                
+                # minimum and maximum values for observation space
                 't_min':0, 'h_min':0,   'a_min':0,
                 't_max':110,   'h_max':100, 'a_max':2000,
+
+                # random abbration setting and episode length
                 'stat_rand_min':-1, 'stat_rand_max':1, 'equilibrium_cycles':1000,
+
+                # rewards definitions
                 'reward1': -2, 'reward2': -1, 'reward3': 10, 'nreward': -10,
+
+                # action weights and action status
                 'weight_vec': [1, 1, 1, 1, 1], 'action_states' : 2,
+
+                # reward decision constants
                 'range_dict': {
                             0 : [65.0, 80.0, 50.0, 85.0, 40.0, 90.0],
                             1 : [40.0, 60.0, 30.0, 70.0, 20.0, 80.0],
@@ -27,7 +37,7 @@ class TriaClimateEnv(gym.Env):
         # Each location is encoded as an element of {0, ..., `size`}^2, i.e. MultiDiscrete([size, size]).
         #self.pre_state = [self.metadata['t_ini'], self.metadata['h_ini'], self.metadata['a_ini']]
 
-        self.scale_range = [(self.metadata['t_min'],self.metadata['t_max']), (self.metadata['h_min'],self.metadata['h_max']),(self.metadata['h_min'],self.metadata['h_max'])]
+        self.scale_range = [(self.metadata['t_min'], self.metadata['t_max']), (self.metadata['h_min'],self.metadata['h_max']),(self.metadata['h_min'],self.metadata['h_max'])]
         
         low = np.array([self.metadata['t_min'], self.metadata['h_min'], self.metadata['a_min']]).astype(np.int32)
         high = np.array([self.metadata['t_max'], self.metadata['h_max'], self.metadata['a_max']]).astype(np.int32)
@@ -35,8 +45,10 @@ class TriaClimateEnv(gym.Env):
         self.observation_space = spaces.Box(low, high, shape=(3,))
 
         # We have 2 actions, corresponding to "on", "off"
-        self.action_space =  spaces.MultiDiscrete(np.array([self.metadata['action_states'], self.metadata['action_states'],
-                                                            self.metadata['action_states'], self.metadata['action_states'],
+        self.action_space =  spaces.MultiDiscrete(np.array([self.metadata['action_states'], 
+                                                            self.metadata['action_states'],
+                                                            self.metadata['action_states'], 
+                                                            self.metadata['action_states'],
                                                             self.metadata['action_states']]))
         
         self.mean = [self.metadata['range_dict'][0][0] + self.metadata['range_dict'][0][1] // 2,
