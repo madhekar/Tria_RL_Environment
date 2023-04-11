@@ -16,10 +16,10 @@ class TriaClimateEnv(gym.Env):
                 't_max':110,   'h_max':100, 'a_max':2000,
 
                 # random abbration setting and episode length
-                'stat_rand_min':-1, 'stat_rand_max':1, 'equilibrium_cycles':1000,
+                'stat_rand_min':-1, 'stat_rand_max':1, 'equilibrium_cycles':2000,
 
                 # rewards definitions
-                'reward1': -2, 'reward2': -1, 'reward3': 10, 'nreward': -10,
+                'reward1': -1, 'reward2': -.5, 'reward3': 100, 'nreward': -10,
 
                 # action weights and action status
                 'weight_vec': [1, 1, 1, 1, 1], 'action_states' : 2,
