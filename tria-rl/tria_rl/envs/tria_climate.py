@@ -9,7 +9,7 @@ class TriaClimateEnv(gym.Env):
     '''
     metadata = {
                 # initial Values for observation space
-                't_ini': 85, 'h_ini': 65, 'a_ini': 90,
+                't_ini': 109, 'h_ini': 99, 'a_ini': 1999,
                 
                 # minimum and maximum values for observation space
                 't_min':0, 'h_min':0,   'a_min':0,
