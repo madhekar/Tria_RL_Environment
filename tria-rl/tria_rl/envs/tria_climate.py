@@ -64,7 +64,10 @@ class TriaClimateEnv(gym.Env):
         #              self.metadata['h_ini'] + random.uniform(self.metadata['stat_rand_min'], self.metadata['stat_rand_max']),
         #              self.metadata['a_ini'] + random.uniform(self.metadata['stat_rand_min'], self.metadata['stat_rand_max'])
         #              ]
-        self.state =[self.metadata['t_ini'],self.metadata['h_ini'], self.metadata['a_ini']]
+        #self.state =[self.metadata['t_ini'],self.metadata['h_ini'], self.metadata['a_ini']]
+        self.state = [np.random.randint(self.metadata['t_min'], self.metadata['t_max']),
+                      np.random.randint(self.metadata['h_min'], self.metadata['h_max']),
+                      np.random.randint(self.metadata['a_min'], self.metadata['a_max'])]
 
         self.equilibrium_cycles = self.metadata['equilibrium_cycles']
 
@@ -82,7 +85,11 @@ class TriaClimateEnv(gym.Env):
         #              self.metadata['h_ini'] + random.uniform(self.metadata['stat_rand_min'], self.metadata['stat_rand_max']),
         #              self.metadata['a_ini'] + random.uniform(self.metadata['stat_rand_min'], self.metadata['stat_rand_max'])
         #              ]
-        self.state =[self.metadata['t_ini'],self.metadata['h_ini'], self.metadata['a_ini']]
+        #self.state =[self.metadata['t_ini'],self.metadata['h_ini'], self.metadata['a_ini']]
+
+        self.state = [np.random.randint(self.metadata['t_min'], self.metadata['t_max']),
+                      np.random.randint(self.metadata['h_min'], self.metadata['h_max']),
+                      np.random.randint(self.metadata['a_min'], self.metadata['a_max'])]
 
         self.equilibrium_cycles = self.metadata['equilibrium_cycles']
 
