@@ -125,10 +125,10 @@ class TriaClimateEnv(gym.Env):
         #add some abbrations remove it to make it more deterministic
         #st_random = np.random.uniform(self.metadata['stat_rand_min'],self.metadata['stat_rand_max'],3) 
 
-        #st_random = np.random.random(3)
+        st_random = np.random.random(5)
         
         #add some abbrations remove it to make it more deterministic
-        #self.state += st_random
+        self.state += st_random
 
         #self.state = [(-1 + (2.0 * ((v - x[0]) /(x[1] - x[0])))) for x,v in zip(self.scale_range, self.state)]
         print('reward:{} state:{} action: {} '.format(reward, self.state, actionPrime))
