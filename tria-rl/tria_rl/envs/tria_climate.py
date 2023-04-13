@@ -125,7 +125,7 @@ class TriaClimateEnv(gym.Env):
         #add some abbrations remove it to make it more deterministic
         #st_random = np.random.uniform(self.metadata['stat_rand_min'],self.metadata['stat_rand_max'],3) 
 
-        st_random = np.random.random(5)
+        st_random = np.random.randint(-3,3,size=3)
         
         #add some abbrations remove it to make it more deterministic
         self.state += st_random
