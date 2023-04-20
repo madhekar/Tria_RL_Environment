@@ -2,6 +2,7 @@ import gym
 from gym import spaces
 import numpy as np
 import random
+import math
 
 class TriaClimateEnv(gym.Env):
     '''
@@ -19,7 +20,7 @@ class TriaClimateEnv(gym.Env):
                 'stat_rand_min':-1, 'stat_rand_max':1, 'equilibrium_cycles':100,
 
                 # rewards definitions
-                'reward1': -1, 'reward2': -.5, 'reward3': 100, 'nreward': -10,
+                'reward1': -1, 'reward2': -0.5, 'reward3': 100, 'nreward': -10,
 
                 # action weights and action status
                 'weight_vec': [1, 1, 1, 1, 1], 'action_states' : 2,
