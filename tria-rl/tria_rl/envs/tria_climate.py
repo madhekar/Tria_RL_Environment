@@ -139,7 +139,7 @@ class TriaClimateEnv(gym.Env):
         #self.state += st_random
 
         #self.state = [(-1 + (2.0 * ((v - x[0]) /(x[1] - x[0])))) for x,v in zip(self.scale_range, self.state)]
-        print('reward:{} state:{} action: {} '.format(reward, self.state, actionPrime))
+        #print('reward:{} state:{} action: {} '.format(reward, self.state, actionPrime))
 
         reward = sum(reward)
         
