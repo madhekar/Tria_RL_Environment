@@ -48,7 +48,9 @@ class TriaClimateEnv(gym.Env):
         # We have 2 actions, corresponding to "on", "off"
         # spaces.MultiDiscrete(np.array([self.metadata['action_states'], self.metadata['action_states'], self.metadata['action_states'], self.metadata['action_states'], self.metadata['action_states']]))
         #self.action_space = tuple((spaces.Discrete(2),spaces.Discrete(2),spaces.Discrete(2),spaces.Discrete(2),spaces.Discrete(2)))
-        self.action_space = spaces.Box(low=0, high=1, shape=(5,), dtype=np.int32)
+        a_low = np.array([0, 0, 0, 0, 0])#.astype(np.int32)
+        a_high = np.array([1, 1, 1, 1, 1])#.astype(np.int32)    
+        self.action_space = spaces.Box(a_low, a_high, shape=(5,), dtype=np.int32)
 
 
         self.mean = [self.metadata['range_dict'][0][0] + self.metadata['range_dict'][0][1] // 2,
