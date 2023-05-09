@@ -20,10 +20,10 @@ class TriaClimateEnv(gym.Env):
                 'stat_rand_min':-1, 'stat_rand_max':1, 'equilibrium_cycles':100,
 
                 # rewards definitions
-                'reward1': -1, 'reward2': -0.5, 'reward3': 100, 'nreward': -10,
+                'reward1': -1, 'reward2': -0.5, 'reward3': 10, 'nreward': -5,
 
                 # action weights and action status
-                'weight_vec': [1, 1, 1, 1, 1], 'action_states' : 2,
+                'weight_vec': [1, 1, 2, 1, 1], 'action_states' : 2,
 
                 # reward decision constants
                 'range_dict': {
@@ -46,11 +46,11 @@ class TriaClimateEnv(gym.Env):
         self.observation_space = spaces.Box(low, high, shape=(3,), dtype=np.int32)
 
         # We have 2 actions, corresponding to "on", "off"
-        # spaces.MultiDiscrete(np.array([self.metadata['action_states'], self.metadata['action_states'], self.metadata['action_states'], self.metadata['action_states'], self.metadata['action_states']]))
+        self.action_space = spaces.MultiDiscrete(np.array([self.metadata['action_states'], self.metadata['action_states'], self.metadata['action_states'], self.metadata['action_states'], self.metadata['action_states']]))
         #self.action_space = tuple((spaces.Discrete(2),spaces.Discrete(2),spaces.Discrete(2),spaces.Discrete(2),spaces.Discrete(2)))
-        a_low = np.array([0, 0, 0, 0, 0])#.astype(np.int32)
-        a_high = np.array([1, 1, 1, 1, 1])#.astype(np.int32)    
-        self.action_space = spaces.Box(a_low, a_high, shape=(5,), dtype=np.int32)
+        #a_low = np.array([0, 0, 0, 0, 0])#.astype(np.int32)
+        #a_high = np.array([1, 1, 1, 1, 1])#.astype(np.int32)    
+        #self.action_space = spaces.Box(a_low, a_high, shape=(5,), dtype=np.int32)
 
 
         self.mean = [self.metadata['range_dict'][0][0] + self.metadata['range_dict'][0][1] // 2,
