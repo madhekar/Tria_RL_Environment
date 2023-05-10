@@ -1,14 +1,19 @@
 import gym
 from gym import spaces
+from gym.error import DependencyNotInstalled
 import numpy as np
 import random
 import math
+from typing import Optional, Union
 
 class TriaClimateEnv(gym.Env):
     '''
       scale between -1 and 1 
     '''
     metadata = {
+                'render_modes': ['human', 'rgb_array'],
+                'render_fps': 50,
+
                 # initial Values for observation space
                 't_ini': 109, 'h_ini': 99, 'a_ini': 1999,
                 
@@ -20,7 +25,7 @@ class TriaClimateEnv(gym.Env):
                 'stat_rand_min':-1, 'stat_rand_max':1, 'equilibrium_cycles':100,
 
                 # rewards definitions
-                'reward1': -1, 'reward2': -0.5, 'reward3': 10, 'nreward': -5,
+                'reward1': -0.05, 'reward2': -0.01, 'reward3': 1, 'nreward': -0.1,
 
                 # action weights and action status
                 'weight_vec': [1, 1, 2, 1, 1], 'action_states' : 2,
@@ -33,20 +38,50 @@ class TriaClimateEnv(gym.Env):
                             }          
                 }
 
-    def __init__(self, render_mode=None):
+    def __init__(self, render_mode: Optional[str] = None):
+
         # Observations are dictionaries with the agent's and the target's location.
         # Each location is encoded as an element of {0, ..., `size`}^2, i.e. MultiDiscrete([size, size]).
         #self.pre_state = [self.metadata['t_ini'], self.metadata['h_ini'], self.metadata['a_ini']]
-
+        self.render_mode = render_mode
+        self.screen_width = 600
+        self.screen_height = 400
+        self.screen = None
+        self.clock = None
+        
         self.scale_range = [(self.metadata['t_min'], self.metadata['t_max']), (self.metadata['h_min'],self.metadata['h_max']),(self.metadata['h_min'],self.metadata['h_max'])]
         
-        low = np.array([self.metadata['t_min'], self.metadata['h_min'], self.metadata['a_min']])#.astype(np.int32)
-        high = np.array([self.metadata['t_max'], self.metadata['h_max'], self.metadata['a_max']])#.astype(np.int32)
+        low = np.array(
+            [
+                self.metadata['t_min'], 
+                self.metadata['h_min'], 
+                self.metadata['a_min']
+            ], 
+            dtype=np.float32,
+        )
+        high = np.array(
+            [
+                self.metadata['t_max'], 
+                self.metadata['h_max'], 
+                self.metadata['a_max']
+                ],
+                dtype=np.float32,
+        )
 
         self.observation_space = spaces.Box(low, high, shape=(3,), dtype=np.int32)
 
         # We have 2 actions, corresponding to "on", "off"
-        self.action_space = spaces.MultiDiscrete(np.array([self.metadata['action_states'], self.metadata['action_states'], self.metadata['action_states'], self.metadata['action_states'], self.metadata['action_states']]))
+        self.action_space = spaces.MultiDiscrete(
+            #np.array(
+            [
+                self.metadata['action_states'], 
+                self.metadata['action_states'], 
+                self.metadata['action_states'], 
+                self.metadata['action_states'], 
+                self.metadata['action_states']
+            ]
+            #)
+        )
         #self.action_space = tuple((spaces.Discrete(2),spaces.Discrete(2),spaces.Discrete(2),spaces.Discrete(2),spaces.Discrete(2)))
         #a_low = np.array([0, 0, 0, 0, 0])#.astype(np.int32)
         #a_high = np.array([1, 1, 1, 1, 1])#.astype(np.int32)    
