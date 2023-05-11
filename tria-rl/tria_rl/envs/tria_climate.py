@@ -28,7 +28,7 @@ class TriaClimateEnv(gym.Env):
                 'reward1': -0.05, 'reward2': -0.01, 'reward3': 1, 'nreward': -0.1,
 
                 # action weights and action status
-                'weight_vec': [1, 1, 2, 1, 1], 'action_states' : 2,
+                'weight_vec': [.3, .3, .5, .3, .3], 'action_states' : 2,
 
                 # reward decision constants
                 'range_dict': {
@@ -48,7 +48,7 @@ class TriaClimateEnv(gym.Env):
         self.screen_height = 400
         self.screen = None
         self.clock = None
-        
+
         self.scale_range = [(self.metadata['t_min'], self.metadata['t_max']), (self.metadata['h_min'],self.metadata['h_max']),(self.metadata['h_min'],self.metadata['h_max'])]
         
         low = np.array(
@@ -71,8 +71,18 @@ class TriaClimateEnv(gym.Env):
         self.observation_space = spaces.Box(low, high, shape=(3,), dtype=np.int32)
 
         # We have 2 actions, corresponding to "on", "off"
+        '''
+        self.action_space = spaces.Tuple( 
+            [
+                    spaces.Discrete(2), 
+                    spaces.Discrete(2),
+                    spaces.Discrete(2), 
+                    spaces.Discrete(2), 
+                    spaces.Discrete(2) 
+            ]
+                    )
+        
         self.action_space = spaces.MultiDiscrete(
-            #np.array(
             [
                 self.metadata['action_states'], 
                 self.metadata['action_states'], 
@@ -80,8 +90,9 @@ class TriaClimateEnv(gym.Env):
                 self.metadata['action_states'], 
                 self.metadata['action_states']
             ]
-            #)
         )
+        '''
+        self.action_space = gym.spaces.MultiBinary(n=5)
         #self.action_space = tuple((spaces.Discrete(2),spaces.Discrete(2),spaces.Discrete(2),spaces.Discrete(2),spaces.Discrete(2)))
         #a_low = np.array([0, 0, 0, 0, 0])#.astype(np.int32)
         #a_high = np.array([1, 1, 1, 1, 1])#.astype(np.int32)    
@@ -152,7 +163,7 @@ class TriaClimateEnv(gym.Env):
 
         #actionAlgo = [ a * b for a,b in zip(actionAlgo, abs_diff)]
 
-        self.state = [ a + b for a, b in zip(actionAlgo, self.state) ]
+        self.state = [ round(a + b, 2) for a, b in zip(actionAlgo, self.state) ]
 
         #self.pre_state[::] = self.state[::]
 
@@ -177,7 +188,7 @@ class TriaClimateEnv(gym.Env):
         #self.state = [(-1 + (2.0 * ((v - x[0]) /(x[1] - x[0])))) for x,v in zip(self.scale_range, self.state)]
         #print('reward:{} state:{} action: {} '.format(reward, self.state, actionPrime))
 
-        reward = sum(reward)
+        reward = round(sum(reward), 2)
         
 
         if self.equilibrium_cycles <= 0:
@@ -186,7 +197,7 @@ class TriaClimateEnv(gym.Env):
             terminated = False
 
         info = {}
-        #print('reward:{} state:{}'.format(reward, self.state))
+        print('reward:{} state:{}'.format(reward, self.state))
         return self.state, reward, terminated,  info
     
     def scaleState(self):
