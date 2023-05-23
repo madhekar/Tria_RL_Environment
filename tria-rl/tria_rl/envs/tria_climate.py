@@ -28,14 +28,31 @@ class TriaClimateEnv(gym.Env):
                 'reward1': -0.05, 'reward2': -0.01, 'reward3': 1, 'nreward': -0.1,
 
                 # action weights and action status
-                'weight_vec': [.3, .3, .5, .3, .3], 'action_states' : 2,
+                'weight_vec': [.3, .3, .5, .3, .3], 'action_states' : 14,
 
                 # reward decision constants
                 'range_dict': {
                             0 : [65.0, 80.0, 50.0, 85.0, 40.0, 90.0],
                             1 : [40.0, 60.0, 30.0, 70.0, 20.0, 80.0],
                             2 : [0.0, 200.0, 201.0, 600.0, 601.0, 1000.0]
-                            }          
+                            },    
+
+                'actions' : {
+                            0:([0,0,0,0,0], [0,0,0]),
+                            1:([0,0,1,0,0], [0,0,-1]),
+                            2:([0,0,0,1,1], [-1,-1,0]),
+                            3:([0,0,1,1,1], [-1,-1,-1]),
+                            4:([0,0,0,0,1], [0,-1,0]),
+                            5:([0,0,1,0,1], [0,-1,-1]),
+                            6:([0,0,0,1,0], [-1,0,0]),
+                            7:([0,0,1,1,0], [-1,0,-1]),
+                            8:([1,1,0,0,0], [1,1,0]),
+                            9:([1,1,1,0,0], [1,1,-1]),
+                            10:([0,1,0,0,0], [0,1,0]),
+                            11:([0,1,1,0,0], [0,1,-1]),                   
+                            12:([1,0,0,0,0], [1,0,0]),
+                            13:([1,0,1,0,0], [1,0,-1])                                                                                      
+                        }                  
                 }
 
     def __init__(self, render_mode: Optional[str] = None):
@@ -92,11 +109,12 @@ class TriaClimateEnv(gym.Env):
             ]
         )
         '''
-        self.action_space = gym.spaces.MultiBinary(n=5)
+        #self.action_space = gym.spaces.MultiBinary(n=5)
         #self.action_space = tuple((spaces.Discrete(2),spaces.Discrete(2),spaces.Discrete(2),spaces.Discrete(2),spaces.Discrete(2)))
         #a_low = np.array([0, 0, 0, 0, 0])#.astype(np.int32)
         #a_high = np.array([1, 1, 1, 1, 1])#.astype(np.int32)    
         #self.action_space = spaces.Box(a_low, a_high, shape=(5,), dtype=np.int32)
+        self.action_space = gym.spaces.Discrete(14)
 
 
         self.mean = [self.metadata['range_dict'][0][0] + self.metadata['range_dict'][0][1] // 2,
@@ -147,15 +165,15 @@ class TriaClimateEnv(gym.Env):
 
     def step(self, action):
         #print(action) 
-        ap_scaled = [1 if e == 1 else -1 for e in action]  # 0 (off) => -1 and 1 (on) => 1
+        ap_scaled = self.metadata['actions'][action][1] #[1 if e == 1 else -1 for e in action]  # 0 (off) => -1 and 1 (on) => 1
 
         actionPrime = [a * b for a, b in zip(ap_scaled, self.metadata['weight_vec'])]
 
-        actionAlgo = [(actionPrime[a] - actionPrime[a + 3]) for a in range(len(actionPrime) // 2)]
+        ##actionAlgo = [(actionPrime[a] - actionPrime[a + 3]) for a in range(len(actionPrime) // 2)]
         
         #print('ap_scaled: ', ap_scaled, 'actionPrime: ', actionPrime,'actionAlgo: ', actionAlgo)
        
-        actionAlgo.append(actionPrime[len(actionPrime) // 2])
+        ##actionAlgo.append(actionPrime[len(actionPrime) // 2])
 
         #print('***',actionAlgo, self.state)
 
@@ -163,7 +181,7 @@ class TriaClimateEnv(gym.Env):
 
         #actionAlgo = [ a * b for a,b in zip(actionAlgo, abs_diff)]
 
-        self.state = [ round(a + b, 2) for a, b in zip(actionAlgo, self.state) ]
+        self.state = [ round(a + b, 2) for a, b in zip(actionPrime, self.state) ]
 
         #self.pre_state[::] = self.state[::]
 
@@ -197,7 +215,7 @@ class TriaClimateEnv(gym.Env):
             terminated = False
 
         info = {}
-        print('reward:{} state:{}'.format(reward, self.state))
+        #print('reward:{} state:{}'.format(reward, self.state))
         return self.state, reward, terminated,  info
     
     def scaleState(self):
