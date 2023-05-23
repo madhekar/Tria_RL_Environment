@@ -15,7 +15,7 @@ class TriaClimateEnv(gym.Env):
                 'render_fps': 50,
 
                 # initial Values for observation space
-                't_ini': 109, 'h_ini': 99, 'a_ini': 1999,
+                't_ini': 55, 'h_ini': 50, 'a_ini': 1000,
                 
                 # minimum and maximum values for observation space
                 't_min':0, 'h_min':0,   'a_min':0,
@@ -25,10 +25,12 @@ class TriaClimateEnv(gym.Env):
                 'stat_rand_min':-1, 'stat_rand_max':1, 'equilibrium_cycles':100,
 
                 # rewards definitions
-                'reward1': -0.05, 'reward2': -0.01, 'reward3': 1, 'nreward': -0.1,
+                'reward1': -0.05, 'reward2': -0.01, 'reward3': 10, 'nreward': -0.1,
 
                 # action weights and action status
-                'weight_vec': [.3, .3, .5, .3, .3], 'action_states' : 14,
+                'weight_vec': [.3, .3, .5, .3, .3], 
+                'weight_vector': [1,1,1],
+                'action_states' : 14,
 
                 # reward decision constants
                 'range_dict': {
@@ -38,20 +40,20 @@ class TriaClimateEnv(gym.Env):
                             },    
 
                 'actions' : {
-                            0:([0,0,0,0,0], [0,0,0]),
-                            1:([0,0,1,0,0], [0,0,-1]),
-                            2:([0,0,0,1,1], [-1,-1,0]),
-                            3:([0,0,1,1,1], [-1,-1,-1]),
-                            4:([0,0,0,0,1], [0,-1,0]),
-                            5:([0,0,1,0,1], [0,-1,-1]),
-                            6:([0,0,0,1,0], [-1,0,0]),
-                            7:([0,0,1,1,0], [-1,0,-1]),
-                            8:([1,1,0,0,0], [1,1,0]),
-                            9:([1,1,1,0,0], [1,1,-1]),
-                            10:([0,1,0,0,0], [0,1,0]),
-                            11:([0,1,1,0,0], [0,1,-1]),                   
-                            12:([1,0,0,0,0], [1,0,0]),
-                            13:([1,0,1,0,0], [1,0,-1])                                                                                      
+                            0:([0,0,0,0,0],  [-.3,-.3,.3]),
+                            1:([0,0,1,0,0],  [-.3,-.3,-1]),
+                            2:([0,0,0,1,1],  [-1,-1,.3]),
+                            3:([0,0,1,1,1],  [-1,-1,-1]),
+                            4:([0,0,0,0,1],  [-.3,-1,.3]),
+                            5:([0,0,1,0,1],  [-.3,-1,-1]),
+                            6:([0,0,0,1,0],  [-1,-.3,.3]),
+                            7:([0,0,1,1,0],  [-1,-.3,-1]),
+                            8:([1,1,0,0,0],  [1,1,.3]),
+                            9:([1,1,1,0,0],  [1,1,-1]),
+                            10:([0,1,0,0,0], [-.3,1,.3]),
+                            11:([0,1,1,0,0], [-.3,1,-1]),                   
+                            12:([1,0,0,0,0], [1,-.3,.3]),
+                            13:([1,0,1,0,0], [1,-.3,-1])                                                                                      
                         }                  
                 }
 
@@ -167,7 +169,7 @@ class TriaClimateEnv(gym.Env):
         #print(action) 
         ap_scaled = self.metadata['actions'][action][1] #[1 if e == 1 else -1 for e in action]  # 0 (off) => -1 and 1 (on) => 1
 
-        #actionPrime = [a * b for a, b in zip(ap_scaled, self.metadata['weight_vec'])]
+        actionPrime = [a * b for a, b in zip(ap_scaled, self.metadata['weight_vector'])]
 
         ##actionAlgo = [(actionPrime[a] - actionPrime[a + 3]) for a in range(len(actionPrime) // 2)]
         
@@ -181,7 +183,7 @@ class TriaClimateEnv(gym.Env):
 
         #actionAlgo = [ a * b for a,b in zip(actionAlgo, abs_diff)]
 
-        self.state = [ round(a + b, 2) for a, b in zip(ap_scaled, self.state) ]
+        self.state = [ round(a + b, 2) for a, b in zip(actionPrime, self.state) ]
 
         #self.pre_state[::] = self.state[::]
 
@@ -215,7 +217,7 @@ class TriaClimateEnv(gym.Env):
             terminated = False
 
         info = {}
-        print('reward:{} state:{} action:{} prime:{}'.format(reward, self.state, action, ap_scaled))
+        print('reward:{} state:{} action:{} prime:{}'.format(reward, self.state, action, actionPrime))
         return self.state, reward, terminated,  info
     
     def scaleState(self):
