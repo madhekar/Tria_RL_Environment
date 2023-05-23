@@ -167,7 +167,7 @@ class TriaClimateEnv(gym.Env):
         #print(action) 
         ap_scaled = self.metadata['actions'][action][1] #[1 if e == 1 else -1 for e in action]  # 0 (off) => -1 and 1 (on) => 1
 
-        actionPrime = [a * b for a, b in zip(ap_scaled, self.metadata['weight_vec'])]
+        #actionPrime = [a * b for a, b in zip(ap_scaled, self.metadata['weight_vec'])]
 
         ##actionAlgo = [(actionPrime[a] - actionPrime[a + 3]) for a in range(len(actionPrime) // 2)]
         
@@ -181,7 +181,7 @@ class TriaClimateEnv(gym.Env):
 
         #actionAlgo = [ a * b for a,b in zip(actionAlgo, abs_diff)]
 
-        self.state = [ round(a + b, 2) for a, b in zip(actionPrime, self.state) ]
+        self.state = [ round(a + b, 2) for a, b in zip(ap_scaled, self.state) ]
 
         #self.pre_state[::] = self.state[::]
 
@@ -215,7 +215,7 @@ class TriaClimateEnv(gym.Env):
             terminated = False
 
         info = {}
-        #print('reward:{} state:{}'.format(reward, self.state))
+        print('reward:{} state:{} action:{} prime:{}'.format(reward, self.state, action, ap_scaled))
         return self.state, reward, terminated,  info
     
     def scaleState(self):
