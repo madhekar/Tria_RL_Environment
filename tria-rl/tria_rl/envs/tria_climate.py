@@ -29,7 +29,7 @@ class TriaClimateEnv(gym.Env):
 
                 # action weights and action status
                 'weight_vec': [.3, .3, .5, .3, .3], 
-                'weight_vector': [1,1,1],
+                'weight_vector': [1,1,10],
                 'action_states' : 14,
 
                 # reward decision constants
