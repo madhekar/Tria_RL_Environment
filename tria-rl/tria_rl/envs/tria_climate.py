@@ -40,20 +40,20 @@ class TriaClimateEnv(gym.Env):
                             },    
 
                 'actions' : {
-                            0:([0,0,0,0,0],  [-.3,-.3,.3]),
-                            1:([0,0,1,0,0],  [-.3,-.3,-1]),
-                            2:([0,0,0,1,1],  [-1,-1,.3]),
-                            3:([0,0,1,1,1],  [-1,-1,-1]),
-                            4:([0,0,0,0,1],  [-.3,-1,.3]),
-                            5:([0,0,1,0,1],  [-.3,-1,-1]),
-                            6:([0,0,0,1,0],  [-1,-.3,.3]),
-                            7:([0,0,1,1,0],  [-1,-.3,-1]),
-                            8:([1,1,0,0,0],  [1,1,.3]),
-                            9:([1,1,1,0,0],  [1,1,-1]),
-                            10:([0,1,0,0,0], [-.3,1,.3]),
-                            11:([0,1,1,0,0], [-.3,1,-1]),                   
-                            12:([1,0,0,0,0], [1,-.3,.3]),
-                            13:([1,0,1,0,0], [1,-.3,-1])                                                                                      
+                            0 : np.array([-.3,-.3,.3]),
+                            1 : np.array([-.3,-.3,-1]),
+                            2 : np.array([-1,-1,.3]),
+                            3 : np.array([-1,-1,-1]),
+                            4 : np.array([-.3,-1,.3]),
+                            5 : np.array([-.3,-1,-1]),
+                            6 : np.array([-1,-.3,.3]),
+                            7 : np.array([-1,-.3,-1]),
+                            8 : np.array([1,1,.3]),
+                            9 : np.array([1,1,-1]),
+                            10 : np.array([-.3,1,.3]),
+                            11 : np.array([-.3,1,-1]),                   
+                            12 : np.array([1,-.3,.3]),
+                            13 : np.array([1,-.3,-1])                                                                                      
                         }                  
                 }
 
@@ -116,6 +116,23 @@ class TriaClimateEnv(gym.Env):
         #a_low = np.array([0, 0, 0, 0, 0])#.astype(np.int32)
         #a_high = np.array([1, 1, 1, 1, 1])#.astype(np.int32)    
         #self.action_space = spaces.Box(a_low, a_high, shape=(5,), dtype=np.int32)
+
+        self.action_space_meta = np.array([
+                            [-.3,-.3,.3],
+                            [-.3,-.3,-1],
+                            [-1,-1,.3],
+                            [-1,-1,-1],
+                            [-.3,-1,.3],
+                            [-.3,-1,-1],
+                            [-1,-.3,.3],
+                            [-1,-.3,-1],
+                            [1,1,.3],
+                            [1,1,-1],
+                            [-.3,1,.3],
+                            [-.3,1,-1],                   
+                            [1,-.3,.3],
+                            [1,-.3,-1]                                                                                      
+                            ])
         self.action_space = gym.spaces.Discrete(14)
 
 
@@ -167,7 +184,7 @@ class TriaClimateEnv(gym.Env):
 
     def step(self, action):
         #print(action) 
-        ap_scaled = self.metadata['actions'][action][1] #[1 if e == 1 else -1 for e in action]  # 0 (off) => -1 and 1 (on) => 1
+        ap_scaled =self.action_space_meta[action] #[1 if e == 1 else -1 for e in action]  -- 0 (off) => -1 and 1 (on) => 1
 
         actionPrime = [a * b for a, b in zip(ap_scaled, self.metadata['weight_vector'])]
 
