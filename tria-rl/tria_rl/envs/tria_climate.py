@@ -25,7 +25,7 @@ class TriaClimateEnv(gym.Env):
                 'stat_rand_min':-1, 'stat_rand_max':1, 'equilibrium_cycles':100,
 
                 # rewards definitions
-                'reward1': -0.5, 'reward2': -0.1, 'reward3': 10, 'nreward': -1,
+                'reward1': -0.5, 'reward2': -0.1, 'reward3': 10, 'nreward': -5,
 
                 # action weights and action status
                 'weight_vec': [.3, .3, .5, .3, .3], 
@@ -172,9 +172,9 @@ class TriaClimateEnv(gym.Env):
         #              ]
         #self.state =[self.metadata['t_ini'],self.metadata['h_ini'], self.metadata['a_ini']]
 
-        self.state = [np.random.randint(self.metadata['t_min'], self.metadata['t_max']),
-                      np.random.randint(self.metadata['h_min'], self.metadata['h_max']),
-                      np.random.randint(self.metadata['a_min'], self.metadata['a_max'])]
+        self.state = [np.random.randint(self.metadata['t_min'] + 20, self.metadata['t_max'] - 20),
+                      np.random.randint(self.metadata['h_min'] + 20, self.metadata['h_max'] - 20),
+                      np.random.randint(self.metadata['a_min'] + 200, self.metadata['a_max'] - 1000)]
 
         self.equilibrium_cycles = self.metadata['equilibrium_cycles']
 
