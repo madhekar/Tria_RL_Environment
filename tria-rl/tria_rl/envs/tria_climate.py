@@ -183,7 +183,7 @@ class TriaClimateEnv(gym.Env):
         return self.state
 
     def step(self, action):
-        #print(action) 
+        #print('>>>>',action) 
         ap_scaled =self.action_space_meta[action] #[1 if e == 1 else -1 for e in action]  -- 0 (off) => -1 and 1 (on) => 1
 
         actionPrime = [a * b for a, b in zip(ap_scaled, self.metadata['weight_vector'])]
