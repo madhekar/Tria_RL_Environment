@@ -234,7 +234,7 @@ class TriaClimateEnv(gym.Env):
             terminated = False
 
         info = {}
-        print('reward:{} state:{} action:{} prime:{}'.format(reward, self.state, action, actionPrime))
+        #print('reward:{} state:{} action:{} prime:{}'.format(reward, self.state, action, actionPrime))
         return self.state, reward, terminated,  info
     
     def scaleState(self):
