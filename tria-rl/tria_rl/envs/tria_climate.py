@@ -76,7 +76,7 @@ class TriaClimateEnv(gym.Env):
                 self.metadata['h_min'], 
                 self.metadata['a_min']
             ], 
-            dtype=np.uint8,
+            dtype=np.float32,
         )
         high = np.array(
             [
@@ -84,10 +84,10 @@ class TriaClimateEnv(gym.Env):
                 self.metadata['h_max'], 
                 self.metadata['a_max']
                 ],
-                dtype=np.uint8,
+                dtype=np.float32,
         )
 
-        self.observation_space = spaces.Box(low, high, shape=(3,), dtype=np.uint8)
+        self.observation_space = spaces.Box(low, high, shape=(3,), dtype=np.float32)
 
         # We have 2 actions, corresponding to "on", "off"
         '''
@@ -200,7 +200,7 @@ class TriaClimateEnv(gym.Env):
 
         #actionAlgo = [ a * b for a,b in zip(actionAlgo, abs_diff)]
 
-        self.state = [ round(a + b, 0) for a, b in zip(actionPrime, self.state) ]
+        self.state = [ round(a + b, 2) for a, b in zip(actionPrime, self.state) ]
 
         #self.pre_state[::] = self.state[::]
 
