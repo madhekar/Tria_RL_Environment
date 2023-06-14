@@ -18,8 +18,8 @@ class TriaClimateEnv(gym.Env):
                 't_ini': 55, 'h_ini': 50, 'a_ini': 1000,
                 
                 # minimum and maximum values for observation space
-                't_min':0, 'h_min':0,   'a_min':0,
-                't_max':110,   'h_max':100, 'a_max':2000,
+                't_min':-50, 'h_min':0,   'a_min':0,
+                't_max':120,   'h_max':100, 'a_max':20000,
 
                 # random abbration setting and episode length
                 'stat_rand_min':-1, 'stat_rand_max':1, 'equilibrium_cycles':100,
@@ -172,10 +172,14 @@ class TriaClimateEnv(gym.Env):
         #              ]
         #self.state =[self.metadata['t_ini'],self.metadata['h_ini'], self.metadata['a_ini']]
 
-        self.state = [np.random.randint(self.metadata['t_min'] + 20, self.metadata['t_max'] - 20),
-                      np.random.randint(self.metadata['h_min'] + 20, self.metadata['h_max'] - 20),
-                      np.random.randint(self.metadata['a_min'] + 200, self.metadata['a_max'] - 1000)]
+        #self.state = [np.random.randint(self.metadata['t_min'] + 20, self.metadata['t_max'] - 20),
+        #              np.random.randint(self.metadata['h_min'] + 20, self.metadata['h_max'] - 20),
+        #              np.random.randint(self.metadata['a_min'] + 200, self.metadata['a_max'] - 1000)]
 
+        self.state = [np.random.randint(self.metadata['t_min'], self.metadata['t_max']),
+                      np.random.randint(self.metadata['h_min'], self.metadata['h_max']),
+                      np.random.randint(self.metadata['a_min'], self.metadata['a_max'])]
+        
         self.equilibrium_cycles = self.metadata['equilibrium_cycles']
 
         info = self._get_info()
