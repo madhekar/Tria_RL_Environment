@@ -13,6 +13,7 @@ class TriaClimateEnv(gym.Env):
     metadata = {
                 'render_modes': ['human', 'rgb_array'],
                 'render_fps': 50,
+                'test' : 1,
 
                 # initial Values for observation space
                 't_ini': 55, 'h_ini': 50, 'a_ini': 1000,
@@ -117,7 +118,7 @@ class TriaClimateEnv(gym.Env):
         #a_high = np.array([1, 1, 1, 1, 1])#.astype(np.int32)    
         #self.action_space = spaces.Box(a_low, a_high, shape=(5,), dtype=np.int32)
 
-        self.action_space_meta = np.array([
+        self.action_space_meta = [
                             [-.3,-.3,.3],
                             [-.3,-.3,-.6],
                             [-.6,-.6,.3],
@@ -132,7 +133,7 @@ class TriaClimateEnv(gym.Env):
                             [-.3,.6,-.6],                   
                             [.6,-.3,.3],
                             [.6,-.3,-.6]                                                                                      
-                            ])
+                            ]
         self.action_space = gym.spaces.Discrete(14)
 
 
@@ -175,11 +176,12 @@ class TriaClimateEnv(gym.Env):
         #self.state = [np.random.randint(self.metadata['t_min'] + 20, self.metadata['t_max'] - 20),
         #              np.random.randint(self.metadata['h_min'] + 20, self.metadata['h_max'] - 20),
         #              np.random.randint(self.metadata['a_min'] + 200, self.metadata['a_max'] - 1000)]
-
-        self.state = [np.random.randint(self.metadata['t_min'], self.metadata['t_max']),
+        if self.metadata['test'] == 0:
+          self.state = [np.random.randint(self.metadata['t_min'], self.metadata['t_max']),
                       np.random.randint(self.metadata['h_min'], self.metadata['h_max']),
                       np.random.randint(self.metadata['a_min'], self.metadata['a_max'])]
-        
+        else:
+            self.state = random.choice([[81, 61, 201], [-50,0,0],[120,100,20000]])
         self.equilibrium_cycles = self.metadata['equilibrium_cycles']
 
         info = self._get_info()
@@ -253,3 +255,6 @@ class TriaClimateEnv(gym.Env):
     def close(self):
         pass
 
+    def seed(self, seed: int) -> None:
+        random.seed(seed)
+        np.random.seed
