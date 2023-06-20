@@ -181,7 +181,7 @@ class TriaClimateEnv(gym.Env):
                       np.random.randint(self.metadata['h_min'], self.metadata['h_max']),
                       np.random.randint(self.metadata['a_min'], self.metadata['a_max'])]
         else:
-            self.state = random.choice([[81, 61, 201], [-50,0,0],[120,100,20000]])
+            self.state = [81, 61, 201] #random.choice([[81, 61, 201], [-50,0,0],[120,100,20000]])
         self.equilibrium_cycles = self.metadata['equilibrium_cycles']
 
         info = self._get_info()
