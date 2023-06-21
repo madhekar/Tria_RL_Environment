@@ -13,7 +13,7 @@ class TriaClimateEnv(gym.Env):
     metadata = {
                 'render_modes': ['human', 'rgb_array'],
                 'render_fps': 50,
-                'test' : 1,
+                'test' : 0,
 
                 # initial Values for observation space
                 't_ini': 55, 'h_ini': 50, 'a_ini': 1000,
@@ -73,9 +73,12 @@ class TriaClimateEnv(gym.Env):
         
         low = np.array(
             [
-                self.metadata['t_min'], 
-                self.metadata['h_min'], 
-                self.metadata['a_min']
+                -self.metadata['t_max'],
+                -self.metadata['h_max'],
+                -self.metadata['a_max']
+                #self.metadata['t_min'], 
+                #self.metadata['h_min'], 
+                #self.metadata['a_min']
             ], 
             dtype=np.float32,
         )
