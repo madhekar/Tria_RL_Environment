@@ -16,14 +16,14 @@ class TriaClimateEnv(gym.Env):
                 'test' : 0,
 
                 # initial Values for observation space
-                't_ini': 55, 'h_ini': 50, 'a_ini': 1000,
+                't_ini': 55, 'h_ini': 50, 'a_ini': 2000,
                 
                 # minimum and maximum values for observation space
-                't_min':-50, 'h_min':0,   'a_min':0,
-                't_max':120,   'h_max':100, 'a_max':20000,
+                't_min':0, 'h_min':0,   'a_min':0,
+                't_max':120,   'h_max':100, 'a_max':2000,
 
                 # random abbration setting and episode length
-                'stat_rand_min':-1, 'stat_rand_max':1, 'equilibrium_cycles':100,
+                'stat_rand_min':-1, 'stat_rand_max':1, 'equilibrium_cycles':128,
 
                 # rewards definitions
                 'reward1': -2, 'reward2': -1, 'reward3': 10, 'nreward': -10,
@@ -41,17 +41,17 @@ class TriaClimateEnv(gym.Env):
                             },    
 
                 'actions' : {
-                            0 : np.array([-.1,-.1,.1]),
-                            1 : np.array([1,-.1,.1]),
-                            2 : np.array([-.1,1,.1]),
-                            3 : np.array([-.1,-.1,-1]),
-                            4 : np.array([-1,-.3,-.3]),
-                            5 : np.array([-.1,-1,.1]),
-                            6 : np.array([1,1,.1]),
-                            7 : np.array([1,-.1,-1]),
-                            8 : np.array([1,-1,.1]),
-                            9 : np.array([1,-.1,-1]),
-                            10 : np.array([-1,1,.1]),
+                            0 : np.array([-.3,-.3,.3]),
+                            1 : np.array([1,-.3,.3]),
+                            2 : np.array([-.3,1,.3]),
+                            3 : np.array([-.3,-.3,-1]),
+                            4 : np.array([-1,-.5,-.5]),
+                            5 : np.array([-.3,-1,.3]),
+                            6 : np.array([1,1,.3]),
+                            7 : np.array([1,-.3,-1]),
+                            8 : np.array([1,-1,.3]),
+                            9 : np.array([-.3,1,-1]),
+                            10 : np.array([-1,1,.3]),
                             11 : np.array([1,1,-1]),                   
                             12 : np.array([-1,1,-1]),
                             13 : np.array([-1,-1,-1])                                                                                      
@@ -73,12 +73,9 @@ class TriaClimateEnv(gym.Env):
         
         low = np.array(
             [
-                -self.metadata['t_max'],
-                -self.metadata['h_max'],
-                -self.metadata['a_max']
-                #self.metadata['t_min'], 
-                #self.metadata['h_min'], 
-                #self.metadata['a_min']
+                self.metadata['t_min'], 
+                self.metadata['h_min'], 
+                self.metadata['a_min']
             ], 
             dtype=np.float32,
         )
@@ -91,7 +88,7 @@ class TriaClimateEnv(gym.Env):
                 dtype=np.float32,
         )
 
-        self.observation_space = spaces.Box(low, high, shape=(3,), dtype=np.float32)
+        self.observation_space = spaces.Box(low, high) #, shape=(3,), dtype=np.float32)
 
         # We have 2 actions, corresponding to "on", "off"
         '''
@@ -123,17 +120,17 @@ class TriaClimateEnv(gym.Env):
 
 
         self.action_space_meta = [
-                           [-.1,-.1,.1],
-                            [1,-.1,.1],
-                            [-.1,1,.1],
-                            [-.1,-.1,-1],
-                            [-1,-.3,-.3],
-                           [-.1,-1,.1],
-                            [1,1,.1],
-                           [1,-.1,-1],
-                            [1,-1,.1],
-                           [1,-.1,-1],
-                            [-1,1,.1],
+                           [-.3,-.3,.3],
+                            [1,-.3,.3],
+                            [-.3,1,.3],
+                            [-.3,-.3,-1],
+                            [-1,-.5,-.5],
+                           [-.3,-1,.3],
+                            [1,1,.3],
+                           [1,-.3,-1],
+                            [1,-1,.3],
+                           [-.3,1,-1],
+                            [-1,1,.3],
                             [1,1,-1],                   
                            [-1,1,-1],
                            [-1,-1,-1]                                              
@@ -169,8 +166,9 @@ class TriaClimateEnv(gym.Env):
           "triaClimateEnv"
         }
 
-    def reset(self, seed=None, options=None):
+    def reset(self, seed=1234, options=None):
 
+        #super().reset()
         #self.state = [self.metadata['t_ini'] + random.uniform(self.metadata['stat_rand_min'], self.metadata['stat_rand_max']),
         #              self.metadata['h_ini'] + random.uniform(self.metadata['stat_rand_min'], self.metadata['stat_rand_max']),
         #              self.metadata['a_ini'] + random.uniform(self.metadata['stat_rand_min'], self.metadata['stat_rand_max'])
@@ -180,16 +178,17 @@ class TriaClimateEnv(gym.Env):
         #self.state = [np.random.randint(self.metadata['t_min'] + 20, self.metadata['t_max'] - 20),
         #              np.random.randint(self.metadata['h_min'] + 20, self.metadata['h_max'] - 20),
         #              np.random.randint(self.metadata['a_min'] + 200, self.metadata['a_max'] - 1000)]
+        
         if self.metadata['test'] == 0:
           self.state = [np.random.randint(self.metadata['t_min'], self.metadata['t_max']),
                       np.random.randint(self.metadata['h_min'], self.metadata['h_max']),
                       np.random.randint(self.metadata['a_min'], self.metadata['a_max'])]
         else:
-            self.state = [81, 61, 201] #random.choice([[81, 61, 201], [-50,0,0],[120,100,20000]])
+            self.state = [81,61,201] #random.choice([[81, 61, 201],[-50,0,0],[120,100,20000],[70,50,100 ]])#[81, 61, 201] #
         self.equilibrium_cycles = self.metadata['equilibrium_cycles']
 
         info = self._get_info()
-
+        #print('reset: ',self.state, ' : ', self.equilibrium_cycles)
         return self.state
 
     def step(self, action):
