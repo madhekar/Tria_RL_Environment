@@ -13,7 +13,7 @@ class TriaClimateEnv(gym.Env):
     metadata = {
                 'render_modes': ['human', 'rgb_array'],
                 'render_fps': 50,
-                'test' : 0,
+                'test' : 1,
 
                 # initial Values for observation space
                 't_ini': 55, 'h_ini': 50, 'a_ini': 2000,
@@ -23,7 +23,7 @@ class TriaClimateEnv(gym.Env):
                 't_max':120,   'h_max':100, 'a_max':2000,
 
                 # random abbration setting and episode length
-                'stat_rand_min':-1, 'stat_rand_max':1, 'equilibrium_cycles':128,
+                'stat_rand_min':-1, 'stat_rand_max':1, 'equilibrium_cycles':2000,
 
                 # rewards definitions
                 'reward1': -2, 'reward2': -1, 'reward3': 10, 'nreward': -10,
@@ -184,7 +184,7 @@ class TriaClimateEnv(gym.Env):
                       np.random.randint(self.metadata['h_min'], self.metadata['h_max']),
                       np.random.randint(self.metadata['a_min'], self.metadata['a_max'])]
         else:
-            self.state = [81,61,201] #random.choice([[81, 61, 201],[-50,0,0],[120,100,20000],[70,50,100 ]])#[81, 61, 201] #
+            self.state = random.choice([[65,40,0], [80,60,200]])#random.choice([[65,40,0], [80,60,200], [50,30,201], [85,70,500], [40,20,501],[90,80,800]])#random.choice([[81, 61, 201],[-50,0,0],[120,100,2000],[70,50,100 ]])#[81, 61, 201] #
         self.equilibrium_cycles = self.metadata['equilibrium_cycles']
 
         info = self._get_info()
