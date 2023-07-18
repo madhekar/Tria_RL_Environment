@@ -13,7 +13,7 @@ class TriaClimateEnv(gym.Env):
     metadata = {
                 'render_modes': ['human', 'rgb_array'],
                 'render_fps': 50,
-                'test' : 1,
+                'test' : 0,
 
                 # initial Values for observation space
                 't_ini': 55, 'h_ini': 50, 'a_ini': 2000,
@@ -45,7 +45,7 @@ class TriaClimateEnv(gym.Env):
                             1 : np.array([.5,-.1,.1]),
                             2 : np.array([-.1,.5,.1]),
                             3 : np.array([-.1,-.1,-.5]),
-                            4 : np.array([-.5,-.1,-.1]),
+                            4 : np.array([-.5,-.1,.1]),
                             5 : np.array([-.1,-.5,.1]),
                             6 : np.array([.5,.5,.1]),
                             7 : np.array([.5,-.1,-.5]),
@@ -124,7 +124,7 @@ class TriaClimateEnv(gym.Env):
                             [.5,-.1,.1],
                             [-.1,.5,.1],
                             [-.1,-.1,-.5],
-                            [-.5,-.1,-.1],
+                            [-.5,-.1,.1],
                            [-.1,-.5,.1],
                             [.5,.5,.1],
                            [.5,-.1,-.5],
