@@ -119,11 +119,11 @@ class TriaClimateEnv(gym.Env):
         #self.action_space = spaces.Box(a_low, a_high, shape=(5,), dtype=np.int32)
 
 
-        self.action_space_meta = [[-.1,-.1,.1], [-.1,-.5,.1],[-.5,-.1,.1],[-.5 ,-.5 ,.1 ],[ -.1,-.1 ,-.5 ],[ -.1,-.5, -.5 ],[ -.5,-.1 ,-.5 ],
-                            [ -.5 , -.5, -.5 ],[-.1,.5 ,.1 ], [ 0 ,0,0 ],[-.5, .5, .1],[ 0,0 ,0 ], [ -.1,.5 ,-.5 ],[0,0 ,0 ],
-                            [-.5,.5 ,-.5 ],[0 ,0 , 0], [.5 ,-.1 ,.1 ], [ .5,-.5 ,.1 ], [0 ,0 ,0 ], [ 0, 0, 0], [.5 ,-.1 ,-.5 ],
-                            [ .5,-.5 ,-.5 ], [0 ,0 ,0 ], [ 0, 0, 0], [ .5, .5, .1],[ 0, 0, 0], [ 0, 0, 0],[ 0, 0, 0],[ .5,.5 ,-.5 ],
-                            [ 0, 0, 0], [ 0, 0, 0],[ 0, 0, 0]]
+        self.action_space_meta = [[-.1,-.1,.1],[-.1,-.5,.1],[-.5,-.1,.1],[-.5,-.5,.1],[-.1,-.1,-.5],[-.1,-.5,-.5],[-.5,-.1,-.5],
+                            [-.5,-.5,-.5],[-.1,.5,.1], [0,0,0],[-.5,.5,.1],[0,0,0], [-.1,.5,-.5],[0,0,0],
+                            [-.5,.5,-.5],[0,0,0], [.5,-.1,.1], [.5,-.5,.1], [0,0,0], [0,0,0], [.5,-.1,-.5],
+                            [.5,-.5,-.5], [0,0,0], [0,0,0], [.5,.5,.1],[0,0,0], [0,0,0],[0,0,0],[.5,.5,-.5],
+                            [0,0,0], [0,0,0],[0,0,0]]
 
         self.action_space = gym.spaces.Discrete(32)
 
@@ -199,7 +199,7 @@ class TriaClimateEnv(gym.Env):
 
         #actionAlgo = [ a * b for a,b in zip(actionAlgo, abs_diff)]
 
-        self.state = [ round(a + b, 2) for a, b in zip(actionPrime, self.state) ]
+        self.state = [ round(a + b, 1) for a, b in zip(actionPrime, self.state) ]
 
         #self.pre_state[::] = self.state[::]
 
@@ -224,7 +224,7 @@ class TriaClimateEnv(gym.Env):
         #self.state = [(-1 + (2.0 * ((v - x[0]) /(x[1] - x[0])))) for x,v in zip(self.scale_range, self.state)]
         #print('reward:{} state:{} action: {} '.format(reward, self.state, actionPrime))
 
-        reward = round(sum(reward), 2)
+        reward = round(sum(reward), 1)
         
 
         if self.equilibrium_cycles <= 0:
