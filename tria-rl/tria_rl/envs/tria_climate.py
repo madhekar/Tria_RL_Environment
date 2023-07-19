@@ -26,7 +26,7 @@ class TriaClimateEnv(gym.Env):
                 'stat_rand_min':-1, 'stat_rand_max':1, 'equilibrium_cycles':2000,
 
                 # rewards definitions
-                'reward1': -2, 'reward2': -1, 'reward3': 10, 'nreward': -10,
+                'reward1': -.5, 'reward2': -.1, 'reward3': 1.0, 'nreward': -1.0,
 
                 # action weights and action status
                 'weight_vec': [.3, .3, .5, .3, .3], 
