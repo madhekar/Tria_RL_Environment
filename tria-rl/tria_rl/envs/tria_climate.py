@@ -23,15 +23,18 @@ class TriaClimateEnv(gym.Env):
                 't_max':120,   'h_max':100, 'a_max':2000,
 
                 # random abbration setting and episode length
-                'stat_rand_min':-1, 'stat_rand_max':1, 'equilibrium_cycles':2000,
+                'stat_rand_min':-1, 'stat_rand_max':1, 'equilibrium_cycles':100,
 
                 # rewards definitions
-                'reward1': -5, 'reward2': -1, 'reward3': 50, 'nreward': -10,
+                'reward1': -5, 'reward2': -1, 'reward3': 20, 'nreward': -10,
 
                 # action weights and action status
                 'weight_vec': [.3, .3, .5, .3, .3], 
                 'weight_vector': [1,1,1],
-                'action_states' : 14,
+                'action_states' : 19,
+                
+                #range for reward computation
+                'reward_calc_range' : [[65,80], [40,60], [0,200]],
 
                 # reward decision constants
                 'range_dict': {
@@ -120,12 +123,11 @@ class TriaClimateEnv(gym.Env):
 
 
         self.action_space_meta = [[-.1,-.1,.1],[-.1,-.7,.1],[-.7,-.1,.1],[-.7,-.7,.1],[-.1,-.1,-.7],[-.1,-.7,-.7],[-.7,-.1,-.7],
-                            [-.7,-.7,-.7],[-.1,.7,.1], [0,0,0],[-.7,.7,.1],[0,0,0], [-.1,.7,-.7],[0,0,0],
-                            [-.7,.7,-.7],[0,0,0], [.7,-.1,.1], [.7,-.7,.1], [0,0,0], [0,0,0], [.7,-.1,-.7],
-                            [.7,-.7,-.7], [0,0,0], [0,0,0], [.7,.7,.1],[0,0,0], [0,0,0],[0,0,0],[.7,.7,-.7],
-                            [0,0,0], [0,0,0],[0,0,0]]
+                            [-.7,-.7,-.7],[-.1,.7,.1],[-.7,.7,.1], [-.1,.7,-.7],
+                            [-.7,.7,-.7], [.7,-.1,.1], [.7,-.7,.1],[.7,-.1,-.7],
+                            [.7,-.7,-.7],[.7,.7,.1],[.7,.7,-.7],[0,0,0]]
 
-        self.action_space = gym.spaces.Discrete(32)
+        self.action_space = gym.spaces.Discrete(19)
 
 
         self.mean = [self.metadata['range_dict'][0][0] + self.metadata['range_dict'][0][1] // 2,
@@ -155,6 +157,14 @@ class TriaClimateEnv(gym.Env):
         return {
           "triaClimateEnv"
         }
+    
+    def c_reward(self, rList, cNum):
+        if rList[0] <= cNum <= rList[1]:
+           rDist = 100
+        else:     
+           rNear = min(rList, key=lambda x:abs(x-cNum))
+           rDist = abs(rNear - cNum) * -0.05
+        return rDist 
 
     def reset(self, seed=1234, options=None):
 
@@ -199,7 +209,7 @@ class TriaClimateEnv(gym.Env):
 
         #actionAlgo = [ a * b for a,b in zip(actionAlgo, abs_diff)]
 
-        self.state = [ round(a + b, 1) for a, b in zip(actionPrime, self.state) ]
+        self.state = [round(a + b, 1) for a, b in zip(actionPrime, self.state) ]
 
         #self.pre_state[::] = self.state[::]
 
@@ -209,8 +219,8 @@ class TriaClimateEnv(gym.Env):
         self.equilibrium_cycles -= 1
 
         #reward = [self.metadata['reward3'] if e >= self.metadata['range_dict'][i][0] and e<= self.metadata['range_dict'][i][1] else self.metadata['reward2'] if e >= self.metadata['range_dict'][i][2] and e<= self.metadata['range_dict'][i][3] else self.metadata['reward1'] if e >= self.metadata['range_dict'][i][4] and e <= self.metadata['range_dict'][i][5] else (((self.mean[i] + abs(self.state[i])) * 0.5 * -1) if self.state[i] < self.mean[i] else ((self.mean[i] - self.state[i]) * 0.5)) for i, e in enumerate(self.state)]
-        reward = [self.metadata['reward3'] if e >= self.metadata['range_dict'][i][0] and e<= self.metadata['range_dict'][i][1] else self.metadata['reward2'] if e >= self.metadata['range_dict'][i][2] and e<= self.metadata['range_dict'][i][3] else self.metadata['reward1'] if e >= self.metadata['range_dict'][i][4] and e <= self.metadata['range_dict'][i][5] else self.metadata['nreward'] for i, e in enumerate(self.state)]
-
+        #reward = [self.metadata['reward3'] if e >= self.metadata['range_dict'][i][0] and e<= self.metadata['range_dict'][i][1] else self.metadata['reward2'] if e >= self.metadata['range_dict'][i][2] and e<= self.metadata['range_dict'][i][3] else self.metadata['reward1'] if e >= self.metadata['range_dict'][i][4] and e <= self.metadata['range_dict'][i][5] else self.metadata['nreward'] for i, e in enumerate(self.state)]
+        reward = [ self.c_reward(a,b) for a,b in zip(self.metadata['reward_calc_range'], self.state)]
         #reward = [r3 if e >= d1[i][0] and e <= d1[i][1] else nr3  for i, e in enumerate(self.state)]
 
         #add some abbrations remove it to make it more deterministic
