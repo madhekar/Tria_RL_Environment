@@ -34,7 +34,7 @@ class TriaClimateEnv(gym.Env):
                 'action_states' : 19,
                 
                 #range for reward computation
-                'reward_calc_range' : [[65,80], [40,60], [0,200]],
+                'reward_calc_range' : [[60,80], [40,60], [0,100]],
 
                 # reward decision constants
                 'range_dict': {
@@ -71,7 +71,7 @@ class TriaClimateEnv(gym.Env):
         self.screen_height = 400
         self.screen = None
         self.clock = None
-        #self.prev_reward = 0.0
+        
 
         self.scale_range = [(self.metadata['t_min'], self.metadata['t_max']), (self.metadata['h_min'],self.metadata['h_max']),(self.metadata['h_min'],self.metadata['h_max'])]
         
@@ -159,7 +159,7 @@ class TriaClimateEnv(gym.Env):
           "triaClimateEnv"
         }
     
-    def c_reward(self, rList, cNum):
+    def compute_reward(self, rList, cNum):
         if rList[0] <= cNum <= rList[1]:
            rDist = 100
         else:     
@@ -221,7 +221,7 @@ class TriaClimateEnv(gym.Env):
 
         #reward = [self.metadata['reward3'] if e >= self.metadata['range_dict'][i][0] and e<= self.metadata['range_dict'][i][1] else self.metadata['reward2'] if e >= self.metadata['range_dict'][i][2] and e<= self.metadata['range_dict'][i][3] else self.metadata['reward1'] if e >= self.metadata['range_dict'][i][4] and e <= self.metadata['range_dict'][i][5] else (((self.mean[i] + abs(self.state[i])) * 0.5 * -1) if self.state[i] < self.mean[i] else ((self.mean[i] - self.state[i]) * 0.5)) for i, e in enumerate(self.state)]
         #reward = [self.metadata['reward3'] if e >= self.metadata['range_dict'][i][0] and e<= self.metadata['range_dict'][i][1] else self.metadata['reward2'] if e >= self.metadata['range_dict'][i][2] and e<= self.metadata['range_dict'][i][3] else self.metadata['reward1'] if e >= self.metadata['range_dict'][i][4] and e <= self.metadata['range_dict'][i][5] else self.metadata['nreward'] for i, e in enumerate(self.state)]
-        reward = [ self.c_reward(a,b) for a,b in zip(self.metadata['reward_calc_range'], self.state)]
+        reward = [ self.compute_reward(a,b) for a,b in zip(self.metadata['reward_calc_range'], self.state)]
         #reward = [r3 if e >= d1[i][0] and e <= d1[i][1] else nr3  for i, e in enumerate(self.state)]
 
         #add some abbrations remove it to make it more deterministic
@@ -235,7 +235,7 @@ class TriaClimateEnv(gym.Env):
         #self.state = [(-1 + (2.0 * ((v - x[0]) /(x[1] - x[0])))) for x,v in zip(self.scale_range, self.state)]
         #print('reward:{} state:{} action: {} '.format(reward, self.state, actionPrime))
 
-        reward = sum(reward) 
+        reward = round(sum(reward),1) 
         #print(sreward, self.prev_reward)
         #freward = sreward - self.prev_reward
         #self.prev_reward = sreward
@@ -248,7 +248,7 @@ class TriaClimateEnv(gym.Env):
 
         info = {}
         #print('reward:{} state:{} action:{} prime:{}'.format(reward, self.state, action, actionPrime))
-        return self.state, round(reward,1), terminated,  info
+        return self.state, reward, terminated,  info
     
     def scaleState(self):
         pass
