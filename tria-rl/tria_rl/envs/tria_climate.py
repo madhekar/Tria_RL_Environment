@@ -122,14 +122,18 @@ class TriaClimateEnv(gym.Env):
         #a_high = np.array([1, 1, 1, 1, 1])#.astype(np.int32)    
         #self.action_space = spaces.Box(a_low, a_high, shape=(5,), dtype=np.int32)
 
-
+        '''
         self.action_space_meta = [[-.1,-.1,.1],[-.1,-.7,.1],[-.7,-.1,.1],[-.7,-.7,.1],[-.1,-.1,-.7],[-.1,-.7,-.7],[-.7,-.1,-.7],
                             [-.7,-.7,-.7],[-.1,.7,.1],[-.7,.7,.1], [-.1,.7,-.7],
                             [-.7,.7,-.7], [.7,-.1,.1], [.7,-.7,.1],[.7,-.1,-.7],
                             [.7,-.7,-.7],[.7,.7,.1],[.7,.7,-.7],[0,0,0]]
 
         self.action_space = gym.spaces.Discrete(19)
+        '''
 
+        self.action_space_meta= [[0,0,0],[0,-.5,.1],[-.5,0,.1], [0,0,-.5],[0,.5,1],[.5,0,.1]]
+
+        self.action_space = gym.spaces.Discrete(6)
 
         self.mean = [self.metadata['range_dict'][0][0] + self.metadata['range_dict'][0][1] // 2,
                      self.metadata['range_dict'][1][0] + self.metadata['range_dict'][1][1] // 2,
