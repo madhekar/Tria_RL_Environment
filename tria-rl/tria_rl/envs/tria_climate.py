@@ -219,8 +219,6 @@ class TriaClimateEnv(gym.Env):
 
         #actionAlgo = [ a * b for a,b in zip(actionAlgo, abs_diff)]
 
-        prev_state =  self.state
-
         self.state = [round(a + b, 1) for a, b in zip(actionPrime, self.state) ]
 
         #self.pre_state[::] = self.state[::]
