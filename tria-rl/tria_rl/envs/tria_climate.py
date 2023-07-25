@@ -36,6 +36,8 @@ class TriaClimateEnv(gym.Env):
                 #range for reward computation
                 'reward_calc_range' : [[60,80], [40,60], [0,100]],
 
+                'reward_scaling' : [-.5,-.5,-.05],
+
                 # reward decision constants
                 'range_dict': {
                             0 : [65, 80, 50, 85, 40, 90],
@@ -168,12 +170,12 @@ class TriaClimateEnv(gym.Env):
           "triaClimateEnv"
         }
     
-    def compute_reward(self, rList, cNum):
+    def compute_reward(self, rList, cNum, rScale):
         if rList[0] <= cNum <= rList[1]:
            rDist = 100
         else:     
            rNear = min(rList, key=lambda x:abs(x-cNum))
-           rDist = abs(rNear - cNum) * -0.05
+           rDist = abs(rNear - cNum) * rScale
         return rDist 
 
     def reset(self, seed=1234, options=None):
@@ -230,7 +232,7 @@ class TriaClimateEnv(gym.Env):
 
         #reward = [self.metadata['reward3'] if e >= self.metadata['range_dict'][i][0] and e<= self.metadata['range_dict'][i][1] else self.metadata['reward2'] if e >= self.metadata['range_dict'][i][2] and e<= self.metadata['range_dict'][i][3] else self.metadata['reward1'] if e >= self.metadata['range_dict'][i][4] and e <= self.metadata['range_dict'][i][5] else (((self.mean[i] + abs(self.state[i])) * 0.5 * -1) if self.state[i] < self.mean[i] else ((self.mean[i] - self.state[i]) * 0.5)) for i, e in enumerate(self.state)]
         #reward = [self.metadata['reward3'] if e >= self.metadata['range_dict'][i][0] and e<= self.metadata['range_dict'][i][1] else self.metadata['reward2'] if e >= self.metadata['range_dict'][i][2] and e<= self.metadata['range_dict'][i][3] else self.metadata['reward1'] if e >= self.metadata['range_dict'][i][4] and e <= self.metadata['range_dict'][i][5] else self.metadata['nreward'] for i, e in enumerate(self.state)]
-        reward = [ self.compute_reward(a,b) for a,b in zip(self.metadata['reward_calc_range'], self.state)]
+        reward = [ self.compute_reward(a,b,c) for a,b,c in zip(self.metadata['reward_calc_range'], self.state, self.metadata['reward_scaling'])]
         #reward = [r3 if e >= d1[i][0] and e <= d1[i][1] else nr3  for i, e in enumerate(self.state)]
 
         #add some abbrations remove it to make it more deterministic
