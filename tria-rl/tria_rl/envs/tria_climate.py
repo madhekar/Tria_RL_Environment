@@ -13,7 +13,7 @@ class TriaClimateEnv(gym.Env):
     metadata = {
                 'render_modes': ['human', 'rgb_array'],
                 'render_fps': 50,
-                'test' : 1,
+                'test' : 0,
 
                 # initial Values for observation space
                 't_ini': 55, 'h_ini': 50, 'a_ini': 2000,
