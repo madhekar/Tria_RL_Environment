@@ -13,7 +13,7 @@ class TriaClimateEnv(gym.Env):
     metadata = {
                 'render_modes': ['human', 'rgb_array'],
                 'render_fps': 50,
-                'test' : 0,
+                'test' : 1,
 
                 # initial Values for observation space
                 't_ini': 55, 'h_ini': 50, 'a_ini': 2000,
@@ -131,7 +131,12 @@ class TriaClimateEnv(gym.Env):
         self.action_space = gym.spaces.Discrete(19)
         '''
 
-        self.action_space_meta= [[0,0,0],[0,-.5,.1],[-.5,0,.1], [0,0,-.5],[0,.5,1],[.5,0,.1]]
+        self.action_space_meta= [[0,0,0],
+                                 [0,-.5,.1],
+                                 [-.5,0,.1], 
+                                 [0,0,-.5],
+                                 [0,.5,.1],
+                                 [.5,0,.1]]
 
         self.action_space = gym.spaces.Discrete(6)
 
@@ -213,6 +218,8 @@ class TriaClimateEnv(gym.Env):
         #abs_diff = [ abs(ps-s) for ps , s in zip(self.pre_state, self.state) ]
 
         #actionAlgo = [ a * b for a,b in zip(actionAlgo, abs_diff)]
+
+        prev_state =  self.state
 
         self.state = [round(a + b, 1) for a, b in zip(actionPrime, self.state) ]
 
