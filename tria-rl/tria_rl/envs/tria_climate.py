@@ -19,7 +19,7 @@ class TriaClimateEnv(gym.Env):
                 't_ini': 55, 'h_ini': 50, 'a_ini': 2000,
                 
                 # minimum and maximum values for observation space
-                't_min':0, 'h_min':0,   'a_min':0,
+                't_min':-120, 'h_min':-100,   'a_min':-2000,
                 't_max':120,   'h_max':100, 'a_max':2000,
 
                 # random abbration setting and episode length
@@ -31,12 +31,12 @@ class TriaClimateEnv(gym.Env):
                 # action weights and action status
                 'weight_vec': [.3, .3, .5, .3, .3], 
                 'weight_vector': [1,1,1],
-                'action_states' : 19,
+                'action_states' : 6,
                 
                 #range for reward computation
                 'reward_calc_range' : [[60,80], [40,60], [0,100]],
 
-                'reward_scaling' : [-.06,-.06,-.04],
+                'reward_scaling' : [-0.041, -0.05, -0.0025],#[-.05,-.05,-.03],
 
                 # reward decision constants
                 'range_dict': {
