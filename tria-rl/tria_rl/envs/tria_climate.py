@@ -19,7 +19,7 @@ class TriaClimateEnv(gym.Env):
                 't_ini': 55, 'h_ini': 50, 'a_ini': 2000,
                 
                 # minimum and maximum values for observation space
-                't_min':-120, 'h_min':-100,   'a_min':-2000,
+                't_min':0, 'h_min':0,   'a_min':0,
                 't_max':120,   'h_max':100, 'a_max':2000,
 
                 # random abbration setting and episode length
