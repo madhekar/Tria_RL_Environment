@@ -13,7 +13,7 @@ class TriaClimateEnv(gym.Env):
     metadata = {
                 'render_modes': ['human', 'rgb_array'],
                 'render_fps': 50,
-                'test' : 0,
+                'test' : 1,
 
                 # initial Values for observation space
                 't_ini': 55, 'h_ini': 50, 'a_ini': 2000,
@@ -196,7 +196,7 @@ class TriaClimateEnv(gym.Env):
                       np.random.randint(self.metadata['h_min'], self.metadata['h_max']),
                       np.random.randint(self.metadata['a_min'], self.metadata['a_max'])]
         else:
-            self.state = random.choice([[65,40,0], [80,60,200]])#random.choice([[65,40,0], [80,60,200], [50,30,201], [85,70,500], [40,20,501],[90,80,800]])#random.choice([[81, 61, 201],[-50,0,0],[120,100,2000],[70,50,100 ]])#[81, 61, 201] #
+            self.state = random.choice([[65,40,0], [80,60,200],[70, 50, 50], [90, 70, 110], [50, 30, -10]])#random.choice([[65,40,0], [80,60,200], [50,30,201], [85,70,500], [40,20,501],[90,80,800]])#random.choice([[81, 61, 201],[-50,0,0],[120,100,2000],[70,50,100 ]])#[81, 61, 201] #
         self.equilibrium_cycles = self.metadata['equilibrium_cycles']
 
         info = self._get_info()
