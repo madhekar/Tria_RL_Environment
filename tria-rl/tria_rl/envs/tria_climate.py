@@ -20,7 +20,7 @@ class TriaClimateEnv(gym.Env):
                 
                 # minimum and maximum values for observation space
                 't_min':0, 'h_min':0,   'a_min':0,
-                't_max':120,   'h_max':100, 'a_max':2000,
+                't_max':120,   'h_max':100, 'a_max':1000,
 
                 # random abbration setting and episode length
                 'stat_rand_min':-1, 'stat_rand_max':1, 'equilibrium_cycles':1000,
@@ -36,7 +36,7 @@ class TriaClimateEnv(gym.Env):
                 #range for reward computation
                 'reward_calc_range' : [[60,80], [40,60], [0,100]],
 
-                'reward_scaling' : [-0.041, -0.05, -0.0025],#[-.05,-.05,-.03],
+                'reward_scaling' : [-0.04, -0.05, -0.01],#[-.05,-.05,-.03],
 
                 # reward decision constants
                 'range_dict': {
@@ -134,11 +134,11 @@ class TriaClimateEnv(gym.Env):
         '''
 
         self.action_space_meta= [[0,0,0],
-                                 [0,-.5,.1],
-                                 [-.5,0,.1], 
+                                 [0,-.5,.01],
+                                 [-.5,0,.01], 
                                  [0,0,-.5],
-                                 [0,.5,.1],
-                                 [.5,0,.1]]
+                                 [0,.5,.01],
+                                 [.5,0,.01]]
 
         self.action_space = gym.spaces.Discrete(6)
 
