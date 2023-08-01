@@ -13,7 +13,7 @@ class TriaClimateEnv(gym.Env):
     metadata = {
                 'render_modes': ['human', 'rgb_array'],
                 'render_fps': 50,
-                'test' : 0,
+                'test' : 1,
 
                 # initial Values for observation space
                 't_ini': 55, 'h_ini': 50, 'a_ini': 2000,
@@ -34,9 +34,9 @@ class TriaClimateEnv(gym.Env):
                 'action_states' : 6,
                 
                 #range for reward computation
-                'reward_calc_range' : [[60,80], [40,60], [0,100]],
+                'reward_calc_range' : [[60,80], [40,60], [0,400]],
 
-                'reward_scaling' : [-0.04, -0.05, -0.01],#[-.05,-.05,-.03],
+                'reward_scaling' : [-0.9, -0.9, -0.05],#[-.05,-.05,-.03],
 
                 # reward decision constants
                 'range_dict': {
