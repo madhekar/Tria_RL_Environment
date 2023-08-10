@@ -1,5 +1,7 @@
 import gym
+#import gymnasium as gym
 from gym import spaces
+#from gymnasium import spaces
 from gym.error import DependencyNotInstalled
 import numpy as np
 import random
@@ -36,7 +38,7 @@ class TriaClimateEnv(gym.Env):
                 #range for reward computation
                 'reward_calc_range' : [[60,80], [40,60], [0,400]],
 
-                'reward_scaling' : [-0.9, -0.9, -0.03], #[-0.9, -0.9, -0.05],#[-.05,-.05,-.03],
+                'reward_scaling' : [-0.9, -0.9, -0.0375], #[-0.9, -0.9, -0.05],#[-.05,-.05,-.03],
 
                 # reward decision constants
                 'range_dict': {
@@ -140,7 +142,7 @@ class TriaClimateEnv(gym.Env):
                                  [0,.5,.01],
                                  [.5,0,.01]]
 
-        self.action_space = gym.spaces.Discrete(6)
+        self.action_space = spaces.discrete.Discrete(6)
 
         self.mean = [self.metadata['range_dict'][0][0] + self.metadata['range_dict'][0][1] // 2,
                      self.metadata['range_dict'][1][0] + self.metadata['range_dict'][1][1] // 2,
@@ -180,7 +182,7 @@ class TriaClimateEnv(gym.Env):
 
     def reset(self, seed=1234, options=None):
 
-        #super().reset()
+        super().reset(seed=seed)
         #self.state = [self.metadata['t_ini'] + random.uniform(self.metadata['stat_rand_min'], self.metadata['stat_rand_max']),
         #              self.metadata['h_ini'] + random.uniform(self.metadata['stat_rand_min'], self.metadata['stat_rand_max']),
         #              self.metadata['a_ini'] + random.uniform(self.metadata['stat_rand_min'], self.metadata['stat_rand_max'])
@@ -201,7 +203,7 @@ class TriaClimateEnv(gym.Env):
 
         info = self._get_info()
         #print('reset: ',self.state, ' : ', self.equilibrium_cycles)
-        return self.state
+        return self.state, {}
 
     def step(self, action):
         #print('>>>>',action) 
@@ -250,7 +252,7 @@ class TriaClimateEnv(gym.Env):
         #print(sreward, self.prev_reward)
         #freward = sreward - self.prev_reward
         #self.prev_reward = sreward
-        
+        truncated = False
 
         if self.equilibrium_cycles <= 0:
             terminated = True
@@ -259,7 +261,7 @@ class TriaClimateEnv(gym.Env):
 
         info = {}
         #print('reward:{} state:{} action:{} prime:{}'.format(reward, self.state, action, actionPrime))
-        return self.state, reward, terminated,  info
+        return self.state, reward, terminated, truncated, info
     
     def scaleState(self):
         pass
