@@ -203,7 +203,7 @@ class TriaClimateEnv(gym.Env):
 
         info = self._get_info()
         #print('reset: ',self.state, ' : ', self.equilibrium_cycles)
-        return self.state, {}
+        return np.array(self.state, dtype=np.float32), {}
 
     def step(self, action):
         #print('>>>>',action) 
@@ -261,7 +261,7 @@ class TriaClimateEnv(gym.Env):
 
         info = {}
         #print('reward:{} state:{} action:{} prime:{}'.format(reward, self.state, action, actionPrime))
-        return self.state, reward, terminated, truncated, info
+        return np.array(self.state, dtype=np.float32), reward, terminated, truncated, info
     
     def scaleState(self):
         pass
