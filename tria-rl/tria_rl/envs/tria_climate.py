@@ -38,7 +38,7 @@ class TriaClimateEnv(gym.Env):
                 #range for reward computation
                 'reward_calc_range' : [[60,80], [40,60], [0,400]],
 
-                'reward_scaling' : [-0.9, -0.9, -0.0375],#[-0.09, -0.09, -0.0099],#[-0.9, -0.9, -0.0375], #[-0.9, -0.9, -0.05],#[-.05,-.05,-.03],
+                'reward_scaling' : [-0.9, -0.9, -0.03],#[-0.09, -0.09, -0.0099],#[-0.9, -0.9, -0.0375], #[-0.9, -0.9, -0.05],#[-.05,-.05,-.03],
 
                 # reward decision constants
                 'range_dict': {
