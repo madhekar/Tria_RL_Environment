@@ -36,7 +36,7 @@ class TriaClimateEnv(gym.Env):
                 'action_states' : 6,
                 
                 #range for reward computation
-                'reward_calc_range' : [[60,80], [40,60], [0,400]],
+                'reward_calc_range' : [[65,78], [35,50], [0,400]],
 
                 'reward_scaling' : [-1,-1,-.15],#[-1, -1, -0.03],#[-0.09, -0.09, -0.0099],#[-0.9, -0.9, -0.0375], #[-0.9, -0.9, -0.05],#[-.05,-.05,-.03],
 
